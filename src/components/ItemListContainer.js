@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchProducts } from "../mockData";
+import { getItems } from "../firebase/firestore";
 import ItemList from "./ItemList";
 
 const ItemListContainer = ({ greeting }) => {
-  const { categoryId } = useParams(); // Obtiene el parámetro de la URL
+  const { categoryId } = useParams(); // OBTENER EL ID DE CATEGORÍA DESDE LA URL
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true); // Muestra el indicador de carga al cambiar de categoría
-    fetchProducts()
-      .then((data) => {
-        if (categoryId) {
-          setProducts(data.filter((product) => product.category === categoryId));
-        } else {
-          setProducts(data);
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [categoryId]); // Reacciona al cambio de categoría
+    const fetchProducts = async () => {
+      setLoading(true);
+
+      try {
+        const data = await getItems(categoryId); // OBTENER PRODUCTOS DESDE FIRESTORE
+        setProducts(data);
+      } catch (error) {
+        console.error("Error al obtener los productos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [categoryId]); // REACCIONA AL CAMBIO DE CATEGORÍA
 
   return (
     <div style={{ padding: "20px", textAlign: "center" }}>

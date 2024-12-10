@@ -12,7 +12,7 @@ const ItemCount = ({ stock, initial, onAdd }) => {
   };
 
   const handleAdd = () => {
-    onAdd(count); // Llama al callback cuando se confirma la cantidad
+    onAdd(count); // LLAMA AL CALLBACK CUANDO SE CONFIRMA LA CANTIDAD
   };
 
   return (

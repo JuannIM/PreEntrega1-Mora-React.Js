@@ -1,18 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import ItemCount from "./ItemCount";
+import { CartContext } from "../context/cartContext";
 import { useNavigate } from "react-router-dom";
 
-const ItemDetail = ({ title, description, price, pictureUrl, stock = 10 }) => {
-  const [added, setAdded] = useState(false); // Estado para ocultar ItemCount
-  const navigate = useNavigate(); // Hook para navegar a /cart
+const ItemDetail = ({ id, title, description, price, pictureUrl, stock = 10 }) => {
+  const [added, setAdded] = useState(false); // CONTROLAR EL ESTADO DEL ITEMCOUNT
+  const { addItem } = useContext(CartContext); // CONSUMIR EL MÉTODO ADDITEM
+  const navigate = useNavigate();
 
   const handleAdd = (quantity) => {
-    console.log(`Agregado al carrito: ${quantity} unidades`);
-    setAdded(true); // Oculta ItemCount
+    const newItem = { id, name: title, price, pictureUrl }; // CREAR EL OBJETO DEL PRODUCTO
+    addItem(newItem, quantity); // AGREGAR EL PRODUCTO AL CARRITO
+    setAdded(true);
   };
 
   const handleCheckout = () => {
-    navigate("/cart"); // Redirige a /cart
+    navigate("/cart"); // REDIRIGE A LA PÁGINA DEL CARRITO
   };
 
   return (
